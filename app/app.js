@@ -8,22 +8,7 @@ import { collection } from '../app/models/userModels.js';
 import bcrypt from 'bcrypt';
 import cookieParser from 'cookie-parser';
 
-async function rehashPasswords() {
-  const users = await collection.find({}).toArray();
 
-  for (const user of users) {
-    if (typeof user.password === 'string' && !user.password.startsWith('$2b$')) {
-      const hashedPassword = await bcrypt.hash(user.password, 10);
-      await collection.updateOne(
-        { _id: user._id },
-        { $set: { password: hashedPassword } }
-      );
-      console.log(`Updated password for user: ${user.user}`);
-    }
-  }
-}
-
-rehashPasswords().catch(console.dir);
 
 const { json } = pkg;
 const app = express();
